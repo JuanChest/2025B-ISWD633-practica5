@@ -3,16 +3,16 @@ version: '3.8'
 services:
   mysql-service:
     image: mysql:8.4
-    container_name: <valor>
+    container_name: contenedormysql
     environment:
-      MYSQL_ROOT_PASSWORD: <valor>
-      MYSQL_DATABASE: <valor>
-      MYSQL_USER: <valor>
-      MYSQL_PASSWORD: <valor>
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: juanchest
+      MYSQL_PASSWORD: wpass 
     volumes:
-      - <valor>:<valor>
+      - C:\Users\JuanChest\Documents\Programación\Construcción y evolución del Software\2025B-ISWD633-practica5\bd:/var/lib/mysql
     networks:
-      - <valor>
+      - net-wp
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 20s
@@ -22,28 +22,28 @@ services:
 
   wordpress-service:
     image: wordpress:6
-    container_name: <valor>
+    container_name: contenedorwordpress
     ports:
-      - <valor>:<valor>
+      - 8080:80
     environment:
-      WORDPRESS_DB_HOST: <valor>
-      WORDPRESS_DB_USER: <valor>
-      WORDPRESS_DB_PASSWORD: <valor>
-      WORDPRESS_DB_NAME: <valor>
+      WORDPRESS_DB_HOST: contenedormysql 
+      WORDPRESS_DB_USER: juanchest
+      WORDPRESS_DB_PASSWORD: wpass
+      WORDPRESS_DB_NAME: wordpress
     volumes:
-      - <valor>:<valor>
+      - C:\Users\JuanChest\Documents\Programación\Construcción y evolución del Software\2025B-ISWD633-practica5\www:/var/www/html
     networks:
-      - <valor>
+      - net-wp
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost"]
       interval: 20s
       timeout: 20s
       retries: 10
       start_period: 50s
-    restart: <valor>
+    restart: always
     depends_on:
       mysql-service:
-        condition: <valor>
+        condition: service_healthy
 volumes:
   mysql-data:
   wordpress-vol:
